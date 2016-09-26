@@ -19,7 +19,7 @@ var noise = new ClassicalNoise();
  *
  * @return {string} the sting is a base64 encoded representation of the image to render on the app
  */
- var Breast = function(width, height, rand, paperObj){
+ var Breast = function(width, height, rand, paperObj) {
 	//setting the paperjs object
 	paper = paperObj;
 
@@ -95,7 +95,7 @@ var setupRectangle = function(size, boundsWidth, boundsHeight) {
 		var h = size * (0.75 + Math.random() * 0.75);
 
 	    // the position where the breast is going to be placed
-	    var position = new Point((boundsWidth/2)-(w/2), (boundsHeight/2) );
+	    var position = new Point((boundsWidth/2)-(w/2), (boundsHeight/2));
 		// this is the rectangle outline for the breast
 		var rectangle = new Rectangle({
 			point: position.subtract(new Point(w, h).multiply(0.5)),
@@ -169,16 +169,16 @@ var roundBreasts = function() {
 			//this also remove the top part of the ellipse
 			var cutLow = Math.round(Math.random() * 10);
 			var cutHigh = 10 + Math.round(Math.random() * 10); 
-			for (var i = cutHigh; i < points.length; i++) 
-			{
+
+			for (var i = cutHigh; i < points.length; i++) {
 				var result = points[i].add(Math.random() * (2 - -2) + -2);
 				path.add(result);
-			};
-			for (var i = 0; i < cutLow; i++) 
-			{
+			}
+
+			for (var i = 0; i < cutLow; i++) {
 				var result = points[i].add(Math.random() * (2 - -2) + -2);
 				path.add(result);
-			};
+			}
 			// senting the path look
 			path.strokeColor = 'black';
 			ellipse.remove();
@@ -254,8 +254,8 @@ var bummpyNipple = function() {
 			outter.scale(2 + Math.random() * 2);
 			outter.fillColor = undefined;
 			var halton = new Halton(2, 3);
-
 			var haltonPoints = halton.getPoints(outter, 20, Math.random() * 20);
+
 			for (var i = 0; i < haltonPoints.length; i++) {
 				var rectanglepoint = new Rectangle({
 					point: haltonPoints[i],
@@ -315,19 +315,19 @@ function randomFromArray(array, rand)
 function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 {
 	with (paper) {
-		if(path instanceof Group)
-		{
-			for(var i = 0; i < path.children.length; i++)
-			{
+
+		if (path instanceof Group) {
+
+			for (var i = 0; i < path.children.length; i++) {
 				applyNoiseToPath(path.children[i], sampleDist, noiseDiv, noiseScale);
 			}
-		}
-		else
-		{
-			if(sampleDist < path.length)
+
+		} else {
+
+			if (sampleDist < path.length)
 				path.flatten(sampleDist);
-			for(var i = 0; i < path.segments.length; i++)
-			{
+
+			for (var i = 0; i < path.segments.length; i++) {
 				var noiseX = noise.noise(path.segments[i].point.x / noiseDiv,
 					path.segments[i].point.y / noiseDiv,
 					noiseSeed);
@@ -337,6 +337,7 @@ function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 
 				path.segments[i].point = path.segments[i].point.add(new Point(noiseX, noiseY).multiply(noiseScale));
 			}
+			
 			path.smooth();
 		}
 	}
@@ -352,7 +353,7 @@ function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
  * @return {array}
  */
 function divideEven(obj, num, divOrDist, fit){
-	if(arguments.length != 4 ||
+	if (arguments.length != 4 ||
 		typeof arguments[0] !== 'object' ||
 		typeof arguments[1] !== 'number' ||
 		typeof arguments[2] !== 'boolean' ||
@@ -363,15 +364,15 @@ function divideEven(obj, num, divOrDist, fit){
 	var points = [];
 	var divs = Math.round(num);
 
-	if(!divOrDist){
-		if(fit){
+	if (!divOrDist) {
+		if (fit) {
 			divs = Math.round(pathLength / num);
 		} else {
 			divs = pathLength / num;
 		}
 	}
 
-	for (var i = 0; i < divs; i++){
+	for (var i = 0; i < divs; i++) {
 
 		points.push(obj.getPointAt(i / divs * pathLength)); 
 
@@ -401,11 +402,12 @@ var Halton = function(baseX, baseY){
 			pointOffset = objekt.bounds.topLeft,
 			offset = Math.round(offset);
 
-			for(var i = 0 + offset; i < count + offset; i++){
+			for (var i = 0 + offset; i < count + offset; i++) {
 				var point = new Point(this.halton(i, this.x), this.halton(i, this.y)).multiply(size).add(pointOffset);
 				
-				if(obj){ if(objekt.contains(point)){
-					 points.push(point);
+				if (obj){ 
+					if (objekt.contains(point)) {
+						points.push(point);
 					} 
 				} else {
 					 points.push(point);
@@ -420,7 +422,7 @@ var Halton = function(baseX, baseY){
 		f = 1 / base,
 		i = index;
 
-		while(i > 0){
+		while (i > 0) {
 			result = result + f * (i % base);
 			i = Math.floor(i / base);
 			f = f / base;

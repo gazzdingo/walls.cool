@@ -52,9 +52,12 @@ var Lines = function(width, height, rand, paperObj){
 		    	path.strokeColor = "black";
 			    // creating random points from 0 - width
 			    path.add(new Point(0, i))
+
 			    for (var j = 1; j < width; j++) {
 			    	j += Math.floor(Math.random() * 30);
-			    	if(j > width) j = width;
+
+			    	if (j > width) 
+			    		j = width;
 			    	path.add(new Point(j, i));
 
 			    };
@@ -92,19 +95,14 @@ var Lines = function(width, height, rand, paperObj){
 function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 {
 	with (paper) {
-		if(path instanceof Group)
-		{
-			for(var i = 0; i < path.children.length; i++)
-			{
+		if (path instanceof Group) {
+			for (var i = 0; i < path.children.length; i++) {
 				applyNoiseToPath(path.children[i], sampleDist, noiseDiv, noiseScale);
 			}
-		}
-		else
-		{
-			if(sampleDist < path.length)
+		} else {
+			if (sampleDist < path.length)
 				path.flatten(sampleDist);
-			for(var i = 0; i < path.segments.length; i++)
-			{
+			for (var i = 0; i < path.segments.length; i++) {
 				var noiseX = noise.noise(path.segments[i].point.x / noiseDiv,
 					path.segments[i].point.y / noiseDiv,
 					noiseSeed);

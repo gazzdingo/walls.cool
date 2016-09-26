@@ -12,6 +12,7 @@ The project is built using Nodejs and Paperjs.
 
 ## Running the site
 1. `DEBUG=walls.cool:* npm start`
-1. on web browser: [http://localhost:3000](http://localhost:3000)
+1. on web browser 
+   * [http://localhost:3000](http://localhost:3000)
 
 

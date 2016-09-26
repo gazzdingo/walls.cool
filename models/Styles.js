@@ -14,7 +14,7 @@ module.exports = {
 	{
 		with(paper) {
 			var squares = new Squares(width, height, rand, paper);
-			var squaresBase64 = Squares.render();
+			var squaresBase64 = squares.render();
 		    return squaresBase64;
 		}
 	},

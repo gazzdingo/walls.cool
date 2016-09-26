@@ -19,16 +19,26 @@ router.get('/', function(req, res, next) {
 	var WIDTH= 500,HEIGHT = 700;
 	// list of all the styles
 	// TODO: update it from being numbers to being a string of the names
-	var stylesIndex = [1,2];
+	var stylesIndex = [1,2,3];
 	var type = stylesIndex[Math.floor(rand(stylesIndex.length))];
 	// this is the data
 	var imageBase64 = "";
 	switch(type) {
+
 		case 1:
-			imageBase64 = styles.breasts(WIDTH,HEIGHT,rand);
+			imageBase64 = styles.colorSquare(WIDTH,HEIGHT,rand);
 			break;
+
 		case 2:
 			imageBase64 = styles.breasts(WIDTH,HEIGHT,rand);
+			break;
+
+		case 3:
+			imageBase64 = styles.linesWithNoise(WIDTH,HEIGHT,rand);
+			break;
+
+		default:
+			break;
 
 	}
 

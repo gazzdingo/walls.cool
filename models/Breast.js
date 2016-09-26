@@ -19,7 +19,7 @@ var noise = new ClassicalNoise();
  *
  * @return {string} the sting is a base64 encoded representation of the image to render on the app
  */
- var breast = function(width, height, rand, paperObj){
+ var Breast = function(width, height, rand, paperObj){
 	//setting the paperjs object
 	paper = paperObj;
 
@@ -429,5 +429,5 @@ var Halton = function(baseX, baseY){
 	}
 }
 
-module.exports = breast;
+module.exports = Breast;
 

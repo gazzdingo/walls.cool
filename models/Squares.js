@@ -1,7 +1,7 @@
-var squares = function(width, height, rand, paperObj){
+var Squares = function(width, height, rand, paperObj){
 	this.render = function() {	
 		with (paperObj) {
-			paper.setup(new Size(width, height));
+			paperObj.setup(new Size(width, height));
 			var amount = view.bounds.width / 25;
 			var colors = ['#EFEADB','#EFEADB','#EFEADB', '#E97956', '#A5C87C', '#856755', '#F2AA62', '#9F5788', '#64C6DD', '#59697A', '#F9D768', '#AE343D'];
 			for (var i = 0; i <= width; i += amount) {
@@ -26,4 +26,4 @@ var squares = function(width, height, rand, paperObj){
 	}
 }
 
-module.exports = squares;
+module.exports = Squares;

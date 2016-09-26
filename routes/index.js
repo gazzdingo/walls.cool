@@ -2,54 +2,65 @@ var express = require('express');
 var paper = require('paper');
 var path = require('path');
 var fs = require('fs');
+var styles = require('../models/Styles');
 var router = express.Router();
 var rand = require('random-seed').create();
 
-/* GET home page. */
+/**
+ * renders the index page and genorates the art
+ * 
+ */
 router.get('/', function(req, res, next) {
-var seedCounter = 0; 
-var paperSVG = null;
-var seedNum = Math.floor(Date.now() / 1000);
-var SEED =  seedNum.toString();
-var test = "for testing re gen";
-rand.seed(SEED);
-with (paper) {
-
+	// creating a seed based on the current unix timestamp
+	var seedNum = Math.floor(Date.now() / 1000);
+	var SEED =  seedNum.toString();
+	// setting the seed to the random generator
+	rand.seed(SEED);
 	var WIDTH= 500,HEIGHT = 700;
-	paper.setup(new Size(WIDTH, HEIGHT));
- 	var amount = view.bounds.width / 25;
+	// list of all the styles
+	// TODO: update it from being numbers to being a string of the names
+	var stylesIndex = [1,2];
+	var type = stylesIndex[Math.floor(rand(stylesIndex.length))];
+	// this is the data
+	var imageBase64 = "";
+	switch(type) {
+		case 1:
+			imageBase64 = styles.breasts(WIDTH,HEIGHT,rand);
+			break;
+		case 2:
+			imageBase64 = styles.breasts(WIDTH,HEIGHT,rand);
 
-    var colors = ['#EFEADB','#EFEADB','#EFEADB', '#E97956', '#A5C87C', '#856755', '#F2AA62', '#9F5788', '#64C6DD', '#59697A', '#F9D768', '#AE343D'];
-
-    for (var i = 0; i <= WIDTH; i += amount) {
-    	for (var j = 0; j < HEIGHT; j += amount) {
-
-		    var size = amount;
-
-		    
-		    var color  = colors[Math.floor(rand(colors.length))];
-		    seedCounter++;
-		    var test = new Path.Rectangle({
-		        x: i,
-		        y: j,
-		        height: amount,
-		        width: amount,
-		        fillColor: color,
-		        strokeFill: 'black'
-		    });
-    	}
 	}
-	var projectRaster = project.layers[0].rasterize();
-	var dataString = projectRaster.toDataURL()
-    paperSVG = project.exportSVG({ asString: true });
 
-}
-
-
-
-
-  res.render('index', { title: dataString, seed: SEED });
+  	res.render('index', { image: imageBase64, seed: SEED });
 
 });
+
+/**
+ * this is for taking in the payment token and creatin the payment
+ *
+ */
+router.get('/pay', function(req, res, next) {
+		var stripe = require("stripe")("XXXX-XXXXX-XXXX");
+
+		// Get the credit card details submitted by the form
+		var token = req.body.stripeToken; // Using Express
+
+		// Create a charge: this will charge the user's card
+		var charge = stripe.charges.create({
+		  amount: 4500, // Amount in cents
+		  currency: "usd",
+		  source: token,
+		  description: "Example charge"
+		}, function(err, charge) {
+		  if (err && err.type === 'StripeCardError') {
+		    // The card has been declined
+		  }
+		});
+});
+
+
+
+
 
 module.exports = router;

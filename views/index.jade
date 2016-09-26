@@ -2,17 +2,25 @@ extends layout
 
 block content
     .container
+        
         .fiftyPercent
-            img(src= title)#imgBG
+            img(src= image)#imgBG
             .overlay
+                .bottomLeft
+                    span
+                        |Printed in A0 Size - 110cm by 180cm  |  Cool Walls 2016 ©
+                .topRight
+                    span Login
                 .printInfoContainer
                     h2#printId #{seed}
                     p#type Your 
                         span Unique 
                         | Print
-                    button Buy Now for $45
+                    a(href=image, download=seed + '.jpg')
+                        button#paynow Buy Now for $45
 
         .fiftyPercent
-            img(src= title)#showing
+            img(src= image)#showing
         .title
                 h1 Cool Walls
+    

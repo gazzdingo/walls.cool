@@ -15,6 +15,7 @@ a {
 	display: flex;
 	
 }
+
 .fiftyPercent {
 	height: 100vh;
 	width:50%;
@@ -28,6 +29,7 @@ a {
 	height: auto;
 
 }
+
 .fiftyPercent #showing {
 	height:80%;
 	position: relative;
@@ -39,6 +41,7 @@ a {
 	width: auto;
 
 }
+
 .fiftyPercent #showing:hover {
 	height:60%;
 	transition: height .5s cubic-bezier(0.65, 0.05, 0.36, 1);
@@ -46,17 +49,45 @@ a {
     cursor: pointer;
 
 }
+
 .fiftyPercent .overlay .printInfoContainer {
 	position: relative;
-
 	top: 50%;
 	left: 50%;
 	text-align: center;
 	display: block;
 	transform: translate(-50%,-75%);
 	width: auto;
+}
+
+.fiftyPercent .overlay  .bottomLeft {
+	position: absolute;
+	left: 60px;
+	bottom: 40px;
+	text-align: center;
+	color: rgb(120,120,120);
+	display: block;
+	width: auto;
+}
+.fiftyPercent .overlay .topRight {
+	position: absolute;
+	right: 60px;
+	top: 40px;
+	text-align: center;
+	color: rgb(120,120,120);
+	display: block;
+	width: auto;
+}
+
+.fiftyPercent .overlay .topRight:hover {
+	cursor: pointer;
+}
+
+.fiftyPercent .overlay .printInfoContainer #printId {
+	letter-spacing: 10px;
 
 }
+
 .fiftyPercent .overlay .printInfoContainer button {
 	padding: 10px 21px;
     font-size: 1em;
@@ -68,7 +99,7 @@ a {
 }
 
 .fiftyPercent .overlay .printInfoContainer #type {
-	color: rgb(25 25, 25);
+	color: rgb(120,120,120);
 	margin-bottom: 24px;
 
 }
@@ -77,6 +108,7 @@ a {
 	color: rgb(173, 76, 82);
 
 }
+
 .fiftyPercent .overlay {
  	background: rgba(255,255,255, .9);
  	position: absolute;
@@ -86,11 +118,13 @@ a {
  	width: 50%;
 
 }
+
 .title {
 	position: absolute;
 	top: 0;
 	left: 0;
 }
+
 .title h1 {
 	font-size: 1.3em;
 	margin-left: 60px;

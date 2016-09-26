@@ -98,3 +98,5 @@ ClassicalNoise.prototype.noise = function(x, y, z) {
 
   return nxyz; 
 };
+
+module.exports = ClassicalNoise;

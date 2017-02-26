@@ -5,6 +5,7 @@ Through the generated art I wanted to express the differences people have and cr
 
 The project is built using Nodejs and Paperjs.
 ## Installing
+sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 1. Install node
     * [https://nodejs.org/en/](https://nodejs.org/en/)
 1. Install [npm](https://www.npmjs.org) dependencies

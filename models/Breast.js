@@ -237,7 +237,7 @@ var bummpyNipple = function() {
 
 
 	        nippleBumpy.strokeWidth = 1;
-	        nippleBumpy.position.y +=  (ellipseRect.height/2);
+	        nippleBumpy.position.y +=  (ellipseRect.height/4);
 			// nippleBumpy.position.x +=  (ellipseRect.height/2) - (Math.random() * (ellipseRect.height/2)) ;
 
 			var colorFill = Math.random() >= 0.5 ? true: false;

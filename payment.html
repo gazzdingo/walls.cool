@@ -1,0 +1,22 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script type="text/javascript">
+  Stripe.setPublishableKey('pk_test_oivzblsx1tbQa2ISuzT69RXK');
+  var cardNumber = 4284180489805241
+  var expiryMonth = 01
+  var expiryMonth = 18
+
+  window.Stripe.card.createToken({
+    number:cardNumber,
+    exp_month: this.expiryMonth,
+    exp_year: this.expiryMonth,
+  }, function(status, response) {
+    if (status === 200) {
+      var token = response.card.id;
+      console.log(token);
+    } else {
+      var errorMessage = response.error.message;
+      console.log(errorMessage);
+    }
+});
+</script>

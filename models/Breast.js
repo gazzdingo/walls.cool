@@ -1,4 +1,7 @@
 
+var fs = require('fs');
+var path = require('path');
+
 var ClassicalNoise = require('../utils/ClassicalNoise');
 
 
@@ -11,7 +14,7 @@ var noise = new ClassicalNoise();
 
 /**
  * this is creates the entire breast/breasts
- * 
+ *
  * @param {float} width
  * @param {float} height
  * @param {Random} random seed genorator(to make it repoducible to print)
@@ -19,7 +22,7 @@ var noise = new ClassicalNoise();
  *
  * @return {string} the sting is a base64 encoded representation of the image to render on the app
  */
- var Breast = function(width, height, rand, paperObj) {
+ var Breast = function(width, height, rand, paperObj, paperObject, cardName) {
 	//setting the paperjs object
 	paper = paperObj;
 
@@ -29,14 +32,23 @@ var noise = new ClassicalNoise();
 		// var nippleLeft = new (randomFromArray(nippleTypes))();
 		// var nippleRight = new (randomFromArray(nippleTypes))();
 		with(paper) {
-
-			paper.setup(new Size(width, height));
+      var canvas = paper.createCanvas(width, height, 'pdf');
+			paper.setup(canvas);
 			var group = new Group();
 			var groupRight = new Group();
 			var bounds = new Path.Rectangle({
 				point: [0,0],
 				size: [width, height]
 			});
+      var text = new PointText(new Point(width / 1.3, height - 50));
+        text.content = cardName;
+        text.style = {
+            fontFamily: 'Moon Flower',
+            fontWeight: 'regular',
+            fontSize: 24,
+            fillColor: 'black',
+            justification: 'center'
+        };
 			bounds.strokeColor ='black';
 			var rectBreasts = new setupRectangle((width * 0.2) + (Math.random() * (width * 0.1)), width, height);
 			var breasts =  new roundBreasts();
@@ -68,10 +80,17 @@ var noise = new ClassicalNoise();
 
 		    groupRight2.strokeWidth = 0.5;
 		    groupRight2.fillColor = undefined; //remove fill
-		    
+
 		    //apply some more noise to the cloned group
 		    applyNoiseToPath(groupRight2, 6, 10.0, 4.0);
-
+        if(paperObject) {
+          paper.view.update();
+          fs.writeFile(path.resolve('../pdf/out.pdf'), canvas.toBuffer(), function (err) {
+              if (err)
+                  throw err;
+              console.log('Saved!');
+          });
+        }
 		    var projectRaster = project.layers[0].rasterize();
 		    var dataString = projectRaster.toDataURL();
 
@@ -100,7 +119,7 @@ var setupRectangle = function(size, boundsWidth, boundsHeight) {
 		var rectangle = new Rectangle({
 			point: position.subtract(new Point(w, h).multiply(0.5)),
 			size: [w, h]
-		}); 
+		});
 
 		return rectangle;
 	}
@@ -119,7 +138,7 @@ var setupRectangle = function(size, boundsWidth, boundsHeight) {
 var BellBreastss = function() {
 	this.draw = function() {
 
-	}	
+	}
 }
 
 var eastWestbreast = function() {
@@ -147,7 +166,7 @@ var tearDropBreasts = function() {
 }
 /**
  * creates the outline of the breast
- * 
+ *
  * @return {Path} outline of the breast
  */
 var roundBreasts = function() {
@@ -156,9 +175,9 @@ var roundBreasts = function() {
 
 
 		with (paper) {
-			// this is the group for the breast 
+			// this is the group for the breast
 
-	        //creating an elipse path for the breast 
+	        //creating an elipse path for the breast
 	        var ellipse = new Path.Ellipse(ellipseRect);
 
 	        // this returns 40 even spaced points around the ellipse
@@ -168,7 +187,7 @@ var roundBreasts = function() {
 			//this is nugdging the points around the ellipse to make it look more hand drawn
 			//this also remove the top part of the ellipse
 			var cutLow = Math.round(Math.random() * 10);
-			var cutHigh = 10 + Math.round(Math.random() * 10); 
+			var cutHigh = 10 + Math.round(Math.random() * 10);
 
 			for (var i = cutHigh; i < points.length; i++) {
 				var result = points[i].add(Math.random() * (2 - -2) + -2);
@@ -216,7 +235,7 @@ var invertedNipple = function() {
 
 /**
  * drawing a group of paths for the nipple
- * 
+ *
  * @return {Group} group of all the paths
  */
 var bummpyNipple = function() {
@@ -289,10 +308,10 @@ var thirdNipple = function() {
 
 /**
  * getting a random object from an array.
- * 
+ *
  * @param  {array}
  * @param  {Random}
- * @return {object} 
+ * @return {object}
  */
 function randomFromArray(array, rand)
 {
@@ -310,7 +329,7 @@ function randomFromArray(array, rand)
  * @param  {float} sampleDist
  * @param  {float} noiseDiv
  * @param  {float} noiseScale
- * 
+ *
  */
 function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 {
@@ -337,7 +356,7 @@ function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 
 				path.segments[i].point = path.segments[i].point.add(new Point(noiseX, noiseY).multiply(noiseScale));
 			}
-			
+
 			path.smooth();
 		}
 	}
@@ -345,7 +364,7 @@ function applyNoiseToPath(path, sampleDist, noiseDiv, noiseScale)
 
 /**
  * divides a path up in to new points array
- * 
+ *
  * @param  {object} obj
  * @param  {int}
  * @param  {boolean}
@@ -374,7 +393,7 @@ function divideEven(obj, num, divOrDist, fit){
 
 	for (var i = 0; i < divs; i++) {
 
-		points.push(obj.getPointAt(i / divs * pathLength)); 
+		points.push(obj.getPointAt(i / divs * pathLength));
 
 	}
 	points.push(obj.getPointAt(pathLength));
@@ -384,7 +403,7 @@ function divideEven(obj, num, divOrDist, fit){
 
 /**
  * halton algorithm for adding dots within an object
- * 
+ *
  * @param {int} baseX
  * @param {int}	baseY
  */
@@ -404,11 +423,11 @@ var Halton = function(baseX, baseY){
 
 			for (var i = 0 + offset; i < count + offset; i++) {
 				var point = new Point(this.halton(i, this.x), this.halton(i, this.y)).multiply(size).add(pointOffset);
-				
-				if (obj){ 
+
+				if (obj){
 					if (objekt.contains(point)) {
 						points.push(point);
-					} 
+					}
 				} else {
 					 points.push(point);
 				}
@@ -432,4 +451,3 @@ var Halton = function(baseX, baseY){
 }
 
 module.exports = Breast;
-

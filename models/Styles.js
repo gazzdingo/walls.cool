@@ -19,10 +19,10 @@ module.exports = {
 		}
 	},
 
-	breasts:  function(width, height, rand)
+	breasts:  function(width, height, rand, outputObject, cardName)
 	{
 		with(paper) {
-			var breasts = new Breasts(width, height, rand, paper);
+			var breasts = new Breasts(width, height, rand, paper, outputObject, cardName);
 			var breastBase64 = breasts.render();
 		    return breastBase64;
 		}
@@ -35,6 +35,6 @@ module.exports = {
 			var lineBase64 = lines.render();
 		    return lineBase64;
 		}
-	} 
+	}
 
 };

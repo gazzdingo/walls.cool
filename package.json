@@ -12,6 +12,7 @@
     "express": "~4.13.4",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
+    "node-printer": "^1.0.2",
     "paper": "^0.10.2",
     "random-seed": "^0.3.0",
     "serve-favicon": "~2.3.0",

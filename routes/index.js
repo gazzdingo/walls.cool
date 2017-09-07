@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 	var WIDTH= 500,HEIGHT = 700;
 	// list of all the styles
 	// TODO: update it from being numbers to being a string of the names
-	var stylesIndex = [1,2,3];
+	var stylesIndex = [2,2,2];
 	var type = stylesIndex[Math.floor(rand(stylesIndex.length))];
 	// this is the data
 	var imageBase64 = "";

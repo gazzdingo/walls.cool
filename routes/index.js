@@ -8,7 +8,7 @@ var rand = require('random-seed').create();
 
 /**
  * renders the index page and genorates the art
- * 
+ *
  */
 router.get('/', function(req, res, next) {
 	// creating a seed based on the current unix timestamp
@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 	// TODO: update it from being numbers to being a string of the names
 	var stylesIndex = [2,2,2];
 	var type = stylesIndex[Math.floor(rand(stylesIndex.length))];
+	var type = 4;
 	// this is the data
 	var imageBase64 = "";
 	switch(type) {
@@ -35,6 +36,9 @@ router.get('/', function(req, res, next) {
 
 		case 3:
 			imageBase64 = styles.linesWithNoise(WIDTH,HEIGHT,rand);
+			break;
+		case 4:
+			imageBase64 = styles.feet(WIDTH,HEIGHT,rand);
 			break;
 
 		default:

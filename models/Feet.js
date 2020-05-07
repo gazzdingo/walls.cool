@@ -5,13 +5,11 @@ var path = require('path');
 var ClassicalNoise = require('../utils/ClassicalNoise');
 
 
-// gloabals for the breasts, nipples and paper object
 var paper = null;
 var noiseSeed = Math.random() * 255;
 var noise = new ClassicalNoise();
 
 /**
- * this is creates the entire breast/breasts
  *
  * @param {float} width
  * @param {float} height
@@ -24,11 +22,7 @@ var noise = new ClassicalNoise();
 	//setting the paperjs object
 	var paper = paperObj;
 
-	this.render = function() {
-		// var breastLeft = new (randomFromArray(breastType))();
-		// var breastRight = new (randomFromArray(breastType))();
-		// var nippleLeft = new (randomFromArray(nippleTypes))();
-		// var nippleRight = new (randomFromArray(nippleTypes))();
+	this.render = function()
 		with(paper){
       var canvas = paper.createCanvas(width, height, 'pdf');
 			paper.setup(canvas);
@@ -46,62 +40,7 @@ var noise = new ClassicalNoise();
       new SimpleLineRenderPreset().draw(toePoints3);
 
     }
-			// var group = new Group();
-			// var groupRight = new Group();
-			// var bounds = new Path.Rectangle({
-			// 	point: [0,0],
-			// 	size: [width, height]
-			// });
-      // var text = new PointText(new Point(width / 1.3, height - 50));
-      //   text.content = cardName;
-      //   text.style = {
-      //       fontFamily: 'Moon Flower',
-      //       fontWeight: 'regular',
-      //       fontSize: 24,
-      //       fillColor: 'black',
-      //       justification: 'center'
-      //   };
-			// bounds.strokeColor ='black';
-      // var height = 60 + Math.random() * 120;
-      // var leftPartOfFoot = LeftPart.draw(height)
-			// group.addChild();
-			// group.addChild(nipple.draw(rectFeets));
-			// var rightGroup = group.clone();
-      //
-      //
-			// var breast2 =  new roundFeets();
-			// groupRight.addChild(breasts.draw(rectFeets));
-			// var nipple = new bummpyNipple();
-			// groupRight.addChild(nipple.draw(rectFeets));
-      //
-			// groupRight.position.x += rectFeets.width + Math.random() * 50;
-      //
-      //
-			// applyNoiseToPath(group, 6, 40.0, 6.0);
-			// applyNoiseToPath(groupRight, 6, 40.0, 6.0);
-      //
-		  //   //clone that group to make a second outline
-		  //   var groupRight2 = groupRight.clone();
-		  //   var group2 = group.clone();
-      //
-      //
-		  //   group2.strokeWidth = 0.5;
-		  //   group2.fillColor = undefined; //remove fill
-		  //   applyNoiseToPath(group2, 6, 10.0, 4.0);
-      //
-		  //   groupRight2.strokeWidth = 0.5;
-		  //   groupRight2.fillColor = undefined; //remove fill
-      //
-		  //   //apply some more noise to the cloned group
-		  //   applyNoiseToPath(groupRight2, 6, 10.0, 4.0);
-      //   if(paperObject) {
-      //     paper.view.update();
-      //     fs.writeFile(path.resolve('../pdf/out.pdf'), canvas.toBuffer(), function (err) {
-      //         if (err)
-      //             throw err;
-      //         console.log('Saved!');
-      //     });
-        // }
+
         with(paper) {
 		    var projectRaster = project.layers[0].rasterize();
 		    var dataString = projectRaster.toDataURL();
@@ -212,21 +151,6 @@ var drawToes = function(){
 
 
 
-
-/**
- * TODO:  - a breast can be asymmetric
- *        - nipples can be different heights
- *		  - nipples can be different types
- *
- */
-
-// this is for all the different breast types
-
-/**
- * creates the outline of the breast
- *
- * @return {Path} outline of the breast
- */
 
 /**
  * getting a random object from an array.

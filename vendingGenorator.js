@@ -14,9 +14,8 @@ rand.seed(SEED);
 var WIDTH= 595,HEIGHT = 842;
 // list of all the styles
 // TODO: update it from being numbers to being a string of the names
-var stylesIndex = [1,2,3];
+var stylesIndex = [1,2];
 var type = stylesIndex[Math.floor(rand(stylesIndex.length))];
-var type = 2;
 // this is the data
 var cardName = ' No Name';
  process.argv.forEach(function (val, index, array) {
@@ -29,10 +28,6 @@ switch(type) {
 
   case 1:
     imageBase64 = styles.colorSquare(WIDTH,HEIGHT,rand);
-    break;
-
-  case 2:
-    imageBase64 = styles.breasts(WIDTH, HEIGHT, rand, true, cardName);
     break;
 
   case 3:

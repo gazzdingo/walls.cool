@@ -3,7 +3,6 @@ var path = require('path');
 var fs = require('fs');
 
 var ClassicalNoise = require('../utils/ClassicalNoise');
-var Breasts = require('./Breast');
 var Squares = require('./Squares');
 var Feet = require('./Feet');
 var Lines = require('./Lines');
@@ -22,16 +21,8 @@ module.exports = {
 	feet: function(width, height, rand, outputObject, cardName) {
 		with(paper) {
 			var feet = new Feet(width, height, rand, paper, outputObject, cardName);
-			var breastBase64 = feet.render();
-		    return breastBase64;
-		}
-	},
-	breasts:  function(width, height, rand, outputObject, cardName)
-	{
-		with(paper) {
-			var breasts = new Breasts(width, height, rand, paper, outputObject, cardName);
-			var breastBase64 = breasts.render();
-		    return breastBase64;
+			var feetBase64 = feet.render();
+		    return feetBase64;
 		}
 	},
 

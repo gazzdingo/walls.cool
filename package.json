@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "logger": "0.0.1",
-    "mocha": "^3.0.2"
+    "mocha": "^10.2.0"
   }
 }

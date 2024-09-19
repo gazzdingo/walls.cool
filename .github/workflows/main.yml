@@ -7,7 +7,6 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user_association == 'MEMBER' || github.event.pull_request.user_association == 'OWNER'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -17,6 +16,7 @@ jobs:
         run: |
           # Get a list of files changed in the pull request
           echo "::set-output name=files::$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})"
+          echo ${{github.event.pull_request.user_association}}
           
       - name: Check for non-Markdown files
         id: check_files

@@ -36,7 +36,7 @@ jobs:
 
       - name: Approve the PR if only Markdown files changed
         if: steps.check_files.outcome == 'success'
-        uses: juliangruber/approve-pull-request-action@v1
+        uses: hmarr/auto-approve-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:

@@ -1,0 +1,34 @@
+name: Auto Approve PRs with Markdown Files
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user_association == 'MEMBER' || github.event.pull_request.user_association == 'OWNER'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Check for non-Markdown files
+        id: check_files
+        run: |
+          # Find all files modified in the PR
+          files=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}..${{ github.event.pull_request.head.ref }})
+          
+          # Filter out files that are not .md or .mdx
+          non_md_files=$(echo "$files" | grep -vE '\.md$|\.mdx$')
+
+          # Fail the step if there are any non-markdown files
+          if [ -n "$non_md_files" ]; then
+            echo "Non-markdown files detected: $non_md_files"
+            exit 1
+          fi
+
+      - name: Auto approve the PR
+        if: success()
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

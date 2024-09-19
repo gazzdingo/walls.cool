@@ -7,28 +7,41 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user_association == 'MEMBER' || github.event.pull_request.user_association == 'OWNER'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         
+      - name: Get list of changed files
+        id: changed_files
+        run: |
+          # Get a list of files changed in the pull request
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})"
+          
       - name: Check for non-Markdown files
         id: check_files
         run: |
-          # Find all files modified in the PR
-          files=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}..${{ github.event.pull_request.head.ref }})
+          files="${{ steps.changed_files.outputs.files }}"
           
-          # Filter out files that are not .md or .mdx
-          non_md_files=$(echo "$files" | grep -vE '\.md$|\.mdx$')
+          # Filter files that are not .md or .mdx
+          non_md_files=$(echo "$files" | grep -vE '\.md$|\.mdx$' || true)
 
-          # Fail the step if there are any non-markdown files
+          # Fail the step if there are any non-Markdown files
           if [ -n "$non_md_files" ]; then
             echo "Non-markdown files detected: $non_md_files"
             exit 1
+          else
+            echo "Only Markdown files detected."
           fi
 
-      - name: Auto approve the PR
-        if: success()
-        uses: hmarr/auto-approve-action@v4
+      - name: Approve the PR if only Markdown files changed
+        if: steps.check_files.outcome == 'success'
+        uses: juliangruber/approve-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if approval step was skipped
+        if: steps.check_files.outcome != 'success'
+        run: exit 1

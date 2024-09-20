@@ -13,7 +13,6 @@
   }, function(status, response) {
     if (status === 200) {
       var token = response.card.id;
-      console.log(token);
     } else {
       var errorMessage = response.error.message;
       console.log(errorMessage);

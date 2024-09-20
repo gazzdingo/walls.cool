@@ -51,28 +51,45 @@ jobs:
           # Get a list of files changed in the pull request
           echo "::set-output name=files::$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})"
           echo ${{github.event.pull_request.user_association}}
-          
-      - name: Check for non-Markdown files
-        id: check_files
+      - name: Get list of changed files in the PR
+        id: get_changed_files
         run: |
-          files="${{ steps.changed_files.outputs.files }}"
-          
-          # Filter files that are not .md or .mdx
-          non_md_files=$(echo "$files" | grep -vE '\.md$|\.mdx$' || true)
+          OWNER=${{ github.repository_owner }}
+          REPO=${{ github.event.repository.name }}
+          PR_NUMBER=${{ github.event.pull_request.number }}
 
-          # Fail the step if there are any non-Markdown files
-          if [ -n "$non_md_files" ]; then
-            echo "Non-markdown files detected: $non_md_files"
-            exit 1
+          # Use the GitHub API to get the list of changed files in the PR
+          CHANGED_FILES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/$OWNER/$REPO/pulls/$PR_NUMBER/files)
+
+          # Extract the filenames from the API response
+          echo "$CHANGED_FILES" | jq -r '.[].filename' > changed_files.txt
+          echo "Changed files: $(cat changed_files.txt)"
+
+      - name: Check if all changed files are markdown or mdx
+        id: check_markdown_files
+        run: |
+          # Check if any non-markdown or non-mdx files exist
+          NON_MARKDOWN_FILES=$(grep -v -E '\.(md|mdx)$' changed_files.txt || true)
+
+          if [ -n "$NON_MARKDOWN_FILES" ]; then
+            echo "Non-markdown/mdx files detected: $NON_MARKDOWN_FILES"
+            echo "only_markdown=false" >> $GITHUB_ENV
           else
-            echo "Only Markdown files detected."
+            echo "All files are markdown or mdx."
+            echo "only_markdown=true" >> $GITHUB_ENV
           fi
 
-      - name: Approve the PR if only Markdown files changed
-        if: steps.check_files.outcome == 'success'
+      - name: Skip if there are non-markdown or non-mdx files
+        if: env.only_markdown == 'false'
+        run: |
+          echo "The PR contains non-markdown or non-mdx files. Skipping workflow."
+          exit 0
+
+      - name: Proceed if all files are markdown or mdx
+        if: env.only_markdown == 'true' && env.role == 'collaborator'
         uses: hmarr/auto-approve-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        

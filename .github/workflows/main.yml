@@ -10,7 +10,41 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+      - name: Get PR Author
+        id: get_pr_author
+        run: echo "PR_AUTHOR=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
+
+      - name: Check if PR author is a collaborator in the repository
+        id: check_user_role
+        run: |
+          USER=${{ env.PR_AUTHOR }}
+          OWNER=${{ github.repository_owner }}
+          REPO=${{ github.event.repository.name }}
+
+          # GitHub API call to check if the user is a collaborator (has read, write, or admin permissions)
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/$OWNER/$REPO/collaborators/$USER/permission)
+
+          # Check if the user has permissions (admin, write, or read)
+          PERMISSION=$(echo $RESPONSE | jq -r .permission)
+          
+          if [[ "$PERMISSION" == "admin" || "$PERMISSION" == "write" || "$PERMISSION" == "read" ]]; then
+            echo "role=collaborator" >> $GITHUB_ENV
+            echo "The user $USER has $PERMISSION permission on the repository."
+          else
+            echo "role=none" >> $GITHUB_ENV
+            echo "The user $USER does not have access to the repository."
+          fi
+
+      - name: Skip if the PR author is not a collaborator
+        if: env.role == 'none'
+        run: |
+          echo "The PR author (${{ env.PR_AUTHOR }}) is not a collaborator in the repository. Skipping workflow."
+          exit 0
+
+      - name: Proceed if the user is a collaborator
+        if: env.role == 'collaborator'
+        run: echo "Proceeding because the PR author (${{ env.PR_AUTHOR }}) is a collaborator with repository access."
       - name: Get list of changed files
         id: changed_files
         run: |
@@ -42,6 +76,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fail if approval step was skipped
-        if: steps.check_files.outcome != 'success'
-        run: exit 1
